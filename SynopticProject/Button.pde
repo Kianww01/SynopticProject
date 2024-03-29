@@ -6,12 +6,12 @@ class Button{
   private float buttonX;
   private float buttonY;
   private String buttonText;
-  private color buttonColour;
+  private int buttonColour;
   private boolean isCodeBlock;
   
-  boolean buttonDeleted;
+  private boolean buttonDeleted;
  
-  Button(float x, float y, String text, color c, boolean iCB){
+  Button(float x, float y, String text, int c, boolean iCB){
     
     buttonX = x;
     buttonY = y;
@@ -25,7 +25,7 @@ class Button{
     strokeWeight(1);
     fill(buttonColour);
     rect(buttonX, buttonY, buttonWidth, buttonHeight);
-    fill(0);
+    fill(255);
     textSize(16);
     textAlign(CENTER);
     float tX = buttonX + (buttonWidth/2);
@@ -34,12 +34,23 @@ class Button{
   }
   
   boolean isClicked(){
-    // Must be a codeblock to be deleted
-    if(isCodeBlock == true){
-      // Requires clicking horizontally closer to the center of the button to delete (accuracy could be improved)
-      return dist(buttonX + 50, buttonY + 20, mouseX, mouseY) <= 25;
-    } else{
-     return false; 
-    }
+    // Requires clicking horizontally closer to the center of the button to delete (accuracy could be improved)
+    return dist(buttonX + 50, buttonY + 20, mouseX, mouseY) <= 25;
+  }
+  
+  public float getButtonX(){
+    return this.buttonX; 
+  }
+  
+  public float getButtonY(){
+    return this.buttonY;
+  }
+  
+  public boolean getIsCodeBlock(){
+    return this.isCodeBlock;
+  }
+  
+  public boolean getButtonDeleted(){
+    return this.buttonDeleted;
   }
 }
