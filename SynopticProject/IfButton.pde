@@ -1,0 +1,4 @@
+class IfButton{
+ 
+  // colour
+}

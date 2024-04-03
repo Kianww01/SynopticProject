@@ -1,11 +1,16 @@
-class level{
-   ArrayList<Integer> levelProblemNumValues;
-   int storedNumValue1;
-   int storedNumValue2;
-   int storedNumValue3;
-   
-   ArrayList<String> levelProblemStringValues;
-   String storedStringValue1;
-   String storedStringValue2;
-   String storedStringValue3;
+class Level{
+ 
+  // Button Array
+  private int minimumIfs;
+  private int minimumLoops;
+  // Input Array
+  // Expected Output Array
+  
+  Level(){
+    
+  }
+  
+  public void loadLevel(){
+    
+  }
 }
