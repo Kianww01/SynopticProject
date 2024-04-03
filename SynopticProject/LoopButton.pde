@@ -1,4 +1,0 @@
-class LoopButton{
- 
-  // colour
-}
