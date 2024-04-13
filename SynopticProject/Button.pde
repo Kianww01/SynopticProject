@@ -1,4 +1,4 @@
-class Button{
+abstract class Button{
   
   private float bX;
   private float bY;
@@ -10,7 +10,9 @@ class Button{
   private int bTextFS;
   private color bColour;
   
-  Button(float x, float y, float w, float h, String text, int fontSize, color c){
+  private boolean bActive;
+  
+  Button(float x, float y, float w, float h, String text, int fontSize, color c, boolean active){
      bX = x;
      bY = y;
      bWidth = w;
@@ -18,6 +20,7 @@ class Button{
      bText = text;
      bTextFS = fontSize;
      bColour = c;
+     bActive = active;
   }
   
   void showButton(){
@@ -29,5 +32,27 @@ class Button{
     textSize(bTextFS);
     textAlign(CENTER, CENTER);
     text(bText, bX, bY);
+  }
+  
+  boolean isClicked(){
+    return (mouseX > (bX - (bWidth/2)) && mouseX < (bX + (bWidth/2)) && mouseY > (bY - (bHeight/2)) && mouseY < (bY + (bHeight/2)));
+  }
+  
+  abstract void onClick();
+  
+  public String getBText(){
+   return this.bText; 
+  }
+  
+  public void setBText(String newValue){
+    this.bText = newValue; 
+  }
+  
+  public boolean getBActive(){
+    return this.bActive;
+  }
+  
+  public void setBActive(boolean newValue){
+    this.bActive = newValue;
   }
 }

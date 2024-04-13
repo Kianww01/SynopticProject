@@ -1,15 +1,29 @@
 class StartMenu{
   
-  Button levelSelectButton;
+  //Array of start menu buttons -> Display goes through list and displays
+  ArrayList<StartMenuButton> smButtons;
   
   StartMenu(){
-     
+    smButtons = new ArrayList<StartMenuButton>();
+    smButtons.add(new StartMenuButton(700,400,600,100,"Level Select",32,color(32,32,32), true));  
+   
+    // Potential Level Create Button
+    //smButtons.add(new StartMenuButton(700,600,600,100,"Level Create",32,color(32,32,32))); 
+    display();
   }
   
   void display(){
      background(255, 71, 77);
-     levelSelectButton = new Button(700, 400, 600, 100, "Level Select", 32, color(32,32,32));
-     levelSelectButton.showButton();
-  }
+     for(int i = 0; i < smButtons.size(); i++){
+       smButtons.get(i).showButton();  
+     }
+  }  
   
+  void buttonClicked(){
+    for(int i = 0; i < smButtons.size(); i++){
+      if(smButtons.get(i).isClicked() && smButtons.get(i).getBActive() == true){
+        smButtons.get(i).onClick(); 
+      } 
+    }
+  }
 }

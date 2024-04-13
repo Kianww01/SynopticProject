@@ -1,0 +1,103 @@
+{
+  "levels":[
+    {
+	"levelInfo": "Basic level 1",
+      "levelInput": [
+        1
+      ],
+      "levelExpectedOutput":[
+        1
+      ],
+      "timerLength": 60,
+      "availableCodeBlocks":[
+        "none"
+      ],
+      "minimumIfsUsed": 0,
+      "minimumLoopsUsed": 0
+    },
+    {
+      "levelInfo": "Basic level 2",
+      "levelInput": [
+		1,
+		2,
+		3
+      ],
+      "levelExpectedOutput":[
+		1,
+		2,
+		3
+      ],
+      "timerLength": 60,
+      "availableCodeBlocks":[
+        "none"
+      ],
+      "minimumIfsUsed": 0,
+      "minimumLoopsUsed": 0
+    },
+    {
+      "levelInfo": "Basic level 3",
+      "levelInput": [
+        5,
+        7,
+        3,
+        5,
+        2
+      ],
+      "levelExpectedOutput":[
+        5,
+        5
+      ],
+      "timerLength": 60,
+      "availableCodeBlocks":[
+        "if"
+      ],
+      "minimumIfsUsed": 1,
+      "minimumLoopsUsed": 0
+    },
+    {
+      "levelInfo": "Basic level 4",
+      "levelInput": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "levelExpectedOutput":[
+        3,
+        3,
+        3
+      ],
+      "timerLength": 60,
+      "availableCodeBlocks": [
+        "loop"
+      ],
+      "minimumIfsUsed": 0,
+      "minimumLoopsUsed": 1
+    },
+    {
+      "levelInfo": "Basic level 5",
+      "levelInput": [
+        3,
+        9,
+        4,
+        6,
+        3,
+        3,
+        8
+      ],
+      "levelExpectedOutput":[
+        3,
+        3,
+        3
+      ],
+      "timerLength": 60,
+      "availableCodeBlocks": [
+        "if",
+        "loop"
+      ],
+      "minimumIfsUsed": 1,
+      "minimumLoopsUsed": 1
+    }
+  ]
+}
