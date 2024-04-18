@@ -1,0 +1,99 @@
+{
+  "levels":[
+    {
+	"levelInfo": "The Input block will take the next value in the input array and store it for use. \n The Output block will take the stored value and place it into the final output array. \n Use these blocks to solve the problem!",
+      "levelInput": [
+        1
+      ],
+      "levelExpectedOutput":[
+        1
+      ],
+      "timerLength": 60,
+      "availableCodeBlocks":[],
+      "minimumIfsUsed": 0,
+      "minimumLoopsUsed": 0
+    },
+    {
+      "levelInfo": "The Input and Output blocks can be used multiple times, try it now to solve the problem!",
+      "levelInput": [
+		1,
+		2,
+		3
+      ],
+      "levelExpectedOutput":[
+		1,
+		2,
+		3
+      ],
+      "timerLength": 60,
+      "availableCodeBlocks":[],
+      "minimumIfsUsed": 0,
+      "minimumLoopsUsed": 0
+    },
+    {
+      "levelInfo": "Basic level 3",
+      "levelInput": [
+        5,
+        7,
+        3,
+        5,
+        2
+      ],
+      "levelExpectedOutput":[
+        5,
+        5
+      ],
+      "timerLength": 60,
+      "availableCodeBlocks":[
+        "If"
+      ],
+      "minimumIfsUsed": 1,
+      "minimumLoopsUsed": 0
+    },
+    {
+      "levelInfo": "Basic level 4",
+      "levelInput": [
+        2,
+        2,
+        2,
+        2,
+        2
+      ],
+      "levelExpectedOutput":[
+        2,
+        2,
+        2
+      ],
+      "timerLength": 60,
+      "availableCodeBlocks": [
+        "Loop"
+      ],
+      "minimumIfsUsed": 0,
+      "minimumLoopsUsed": 1
+    },
+    {
+      "levelInfo": "Basic level 5",
+      "levelInput": [
+        3,
+        9,
+        4,
+        6,
+        3,
+        3,
+        8
+      ],
+      "levelExpectedOutput":[
+        3,
+        3,
+        3
+      ],
+      "timerLength": 60,
+      "availableCodeBlocks": [
+        "If",
+        "Loop"
+      ],
+      "minimumIfsUsed": 1,
+      "minimumLoopsUsed": 1
+    }
+  ]
+}
