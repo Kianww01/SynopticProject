@@ -26,7 +26,7 @@ class LevelSelectButton extends Button{
         setCurrentScreen("LVL");
         setCurrentLevel(this.getBText());
         getCurrentLevel().resetAttemptCounter();
-        getCurrentLevel().clearCodeBlocks();
+        //getCurrentLevel().clearCodeBlocks();
         getCurrentLevel().loadLevel();
       }
     }

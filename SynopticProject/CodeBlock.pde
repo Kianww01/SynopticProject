@@ -11,8 +11,11 @@ class CodeBlock{
   private color cbColour;
   
   private ArrayList<CodeBlock> codeBlocks;
-
-  CodeBlock(float x, float y, float w, float h, String text, int fontSize, color c){
+  
+  private int ifCondition;
+  private int loopLength;
+ 
+  CodeBlock(float x, float y, float w, float h, String text, int fontSize, color c, int ifC, int lL){
      cbX = x;
      cbY = y;
      cbWidth = w;
@@ -20,6 +23,9 @@ class CodeBlock{
      cbText = text;
      cbTextFS = fontSize;
      cbColour = c;
+     
+     ifCondition = ifC;
+     loopLength = lL;
      
      codeBlocks = new ArrayList<CodeBlock>();
   }
@@ -49,5 +55,13 @@ class CodeBlock{
   
   public ArrayList<CodeBlock> getCodeBlocks(){
     return codeBlocks; 
+  }
+  
+  public int getIfCondition(){
+    return this.ifCondition;
+  }
+  
+  public int getLoopLength(){
+    return this.loopLength; 
   }
 }

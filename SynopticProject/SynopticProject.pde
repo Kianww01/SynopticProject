@@ -31,6 +31,11 @@ void mousePressed(){
   }
 }
 
+void keyPressed(){
+  // array of accetable inputs
+  // if array.contains(input) && currentLevel.awaitingInput == true then updateLevelIfInput
+}
+
 void loadLevels(){
   // Handles Level Loading on Loadup
   JSONObject levelsObj = loadJSONObject("levels.json");

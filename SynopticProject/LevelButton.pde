@@ -19,7 +19,7 @@ class LevelButton extends Button{
        getCurrentLevel().resetFinalOutput();
        getCurrentLevel().loadLevel();       
     } else if(this.getBText() == "Run Function"){
-      getCurrentLevel().runFunction(); 
+      getCurrentLevel().runFunction(getCurrentLevel().getLevelCBs()); 
     } else{
       getCurrentLevel().addCodeBlock(this.getBText()); 
     }

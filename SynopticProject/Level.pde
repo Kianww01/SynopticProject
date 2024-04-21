@@ -17,6 +17,7 @@ class Level{
   private ArrayList<LevelButton> levelGeneralButtons;
   private ArrayList<LevelButton> codeBlockButtons;
   private ArrayList<CodeBlock> codeBlocks;
+  private ArrayList<CodeBlock> openConditionals;
   
   private int levelAttemptCounter;
   private IntList finalLevelOutput;
@@ -48,8 +49,11 @@ class Level{
       codeBlockButtons.add(new LevelButton(180+((codeBlockButtons.size() - 1)*120),120,100,50,levelCodeBlockButtons.get(i),16,color(32,32,32),true));
     }
     
-    codeBlocks = new ArrayList<CodeBlock>();
+    codeBlockButtons.add(new LevelButton(1140,220,100,50,"End current \nIf/Loop",16,color(32,32,32),true));
     
+    codeBlocks = new ArrayList<CodeBlock>();
+    openConditionals = new ArrayList<CodeBlock>();
+       
     finalLevelOutput = new IntList();
   }
   
@@ -128,10 +132,10 @@ class Level{
     
     fill(color(0,0,0));
     textSize(16);
-    text("Attempts: " + levelAttemptCounter,1150,175);
+    text("Attempts: " + levelAttemptCounter,1140,175);
     
     generateLevelButtons();
-    generateCodeBlocks();
+    generateCodeBlocks(codeBlocks);
   }
   
   private void buttonClicked(){
@@ -157,12 +161,6 @@ class Level{
   private void generateCodeBlockButtons(){
     for(int i = 0; i < codeBlockButtons.size(); i++){
       codeBlockButtons.get(i).showButton(); 
-    }
-  }
-  
-  public void generateCodeBlocks(){
-    for(int i = 0; i < codeBlocks.size(); i++){
-      codeBlocks.get(i).showCodeBlock(); 
     }
   }
   
@@ -206,42 +204,66 @@ class Level{
     return this.levelInput;  
   }
   
-  public void fail(String txt){
+  private void fail(String txt){
     println(txt);
   }
   
+  private ArrayList<CodeBlock> getLevelCBs(){
+    return this.codeBlocks; 
+  }
+  
   public void addCodeBlock(String blockType){
-    if(blockType == "Input" || blockType == "Output"){
-       codeBlocks.add(new CodeBlock(1300,40 + (codeBlocks.size() * 45),150,35,blockType,16,color(32,32,32)));
+    if(blockType.toLowerCase().equals("input") || blockType.toLowerCase().equals("output")){
+      CodeBlock cb = new CodeBlock(1280 + (openConditionals.size() * 15),40+(blocksAdded*45),150,35,blockType,16,color(32,32,32),0,0);
+      if(openConditionals.size() > 0){
+        openConditionals.get(openConditionals.size() - 1).addToCodeBlocks(cb);
+      } else{
+        codeBlocks.add(cb);     
+      }    
+      blocksAdded++;
     }
     
     loadLevel();
   }
   
-  public void runFunction(){
-    for(int i = 0; i < codeBlocks.size(); i++){
-      if(codeBlocks.get(i).getCBText() == "Input"){
+  private void generateCodeBlocks(ArrayList<CodeBlock> cbArray){
+    
+    for(int i = 0; i < cbArray.size(); i++){
+      cbArray.get(i).showCodeBlock(); 
+      if(cbArray.get(i).getCBText().toLowerCase().equals("if") || cbArray.get(i).getCBText().toLowerCase().equals("loop")){
+        cbArray.get(i).showCodeBlock();
+        generateCodeBlocks(cbArray.get(i).getCodeBlocks());
+      } 
+    }
+  }
+    
+  public void runFunction(ArrayList<CodeBlock> cbArray){
+    for(int i = 0; i < cbArray.size(); i++){
+      if(cbArray.get(i).getCBText().toLowerCase().equals("input")){
         if(levelInput.size() == 0){
           fail("You have failed! You can not input from an empty array! \n Please reset the level to try again!");
         } else{
            storedValue = levelInput.get(0);
-           println(levelInput);
-           println(levelInitialInput);
            levelInput.remove(0);
-           println(levelInput);
-           println(levelInitialInput);
         }
-      } else if (codeBlocks.get(i).getCBText() == "Output"){
+      } else if (cbArray.get(i).getCBText().toLowerCase().equals("output")){
         if(storedValue == 404){
           fail("You have failed! You do not have a value stored! \n Please reset the level to try again!"); 
         } else {
           finalLevelOutput.append(storedValue);
           storedValue = 404;
         }
+      } else if (cbArray.get(i).getCBText().toLowerCase().equals("if")){
+        if(storedValue == cbArray.get(i).getIfCondition()){
+          runFunction(cbArray.get(i).getCodeBlocks());
+        }
+      } else if (cbArray.get(i).getCBText().toLowerCase().equals("loop")){
+        for(int loopL = 0; loopL < cbArray.get(i).getLoopLength(); loopL++){
+          runFunction(cbArray.get(i).getCodeBlocks());
+        }
       }
     }
-      
-    resetInput();
+    
     loadLevel();
   }
 }

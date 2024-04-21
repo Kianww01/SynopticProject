@@ -23,7 +23,7 @@ abstract class Button{
      bActive = active;
   }
   
-  void showButton(){
+  public void showButton(){
     strokeWeight(1);
     fill(bColour);
     rectMode(CENTER);
@@ -34,7 +34,7 @@ abstract class Button{
     text(bText, bX, bY);
   }
   
-  boolean isClicked(){
+  public boolean isClicked(){
     return (mouseX > (bX - (bWidth/2)) && mouseX < (bX + (bWidth/2)) && mouseY > (bY - (bHeight/2)) && mouseY < (bY + (bHeight/2)));
   }
   
