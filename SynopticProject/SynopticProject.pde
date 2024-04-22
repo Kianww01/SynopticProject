@@ -3,9 +3,10 @@ private StartMenu sm;
 private LevelSelect ls;
 private ArrayList<Level> levels;
 private Level currentLevel;
+private final char[] validInput = {'0','1','2','3','4','5','6','7','8','9'};
 
 void setup(){
-  size(1400, 800);
+  size(1500, 800);
     
   loadLevels();
     
@@ -34,6 +35,15 @@ void mousePressed(){
 void keyPressed(){
   // array of accetable inputs
   // if array.contains(input) && currentLevel.awaitingInput == true then updateLevelIfInput
+  for(char valid : validInput){
+    if(valid == key){
+      if(currentLevel.getAwaitingIfCondition() == true){
+        currentLevel.generateIfBlock(int(key) - int('0'));
+      } else if(currentLevel.getAwaitingLoopLength() == true){
+        currentLevel.generateLoopBlock(int(key) - int('0')); 
+      }
+    }
+  }
 }
 
 void loadLevels(){

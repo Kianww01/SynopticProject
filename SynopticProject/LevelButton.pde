@@ -17,10 +17,16 @@ class LevelButton extends Button{
        getCurrentLevel().clearCodeBlocks();
        getCurrentLevel().resetInput();
        getCurrentLevel().resetFinalOutput();
-       getCurrentLevel().loadLevel();       
+       getCurrentLevel().resetConditions();
+       getCurrentLevel().enableButtons();
+       getCurrentLevel().loadLevel(); 
     } else if(this.getBText() == "Run Function"){
       getCurrentLevel().runFunction(getCurrentLevel().getLevelCBs()); 
-    } else{
+    } else if(this.getBText() == "End current \nIf/Loop"){
+      getCurrentLevel().closeCurrentConditional();
+      getCurrentLevel().loadLevel();
+    }
+    else{
       getCurrentLevel().addCodeBlock(this.getBText()); 
     }
   }

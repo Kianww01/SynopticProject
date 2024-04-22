@@ -20,13 +20,17 @@ class LevelSelectButton extends Button{
         // Handles returning to the main menu 
         setCurrentScreen("SM");
         getSM().display();
-      }
+      } 
       else{
         // Handles Level Buttons
         setCurrentScreen("LVL");
         setCurrentLevel(this.getBText());
         getCurrentLevel().resetAttemptCounter();
-        //getCurrentLevel().clearCodeBlocks();
+        getCurrentLevel().clearCodeBlocks();
+        getCurrentLevel().resetInput();
+        getCurrentLevel().resetFinalOutput();
+        getCurrentLevel().resetConditions();
+        getCurrentLevel().enableButtons();
         getCurrentLevel().loadLevel();
       }
     }
