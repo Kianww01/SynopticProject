@@ -5,7 +5,7 @@ class StartMenu{
   
   StartMenu(){
     smButtons = new ArrayList<StartMenuButton>();
-    smButtons.add(new StartMenuButton(700,400,600,100,"Level Select",32,color(32,32,32), true));  
+    smButtons.add(new StartMenuButton(750,400,600,100,"Level Select",32,color(32,32,32), true));  
    
     // Potential Level Create Button
     //smButtons.add(new StartMenuButton(700,600,600,100,"Level Create",32,color(32,32,32))); 

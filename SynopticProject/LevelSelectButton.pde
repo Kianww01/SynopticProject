@@ -30,6 +30,8 @@ class LevelSelectButton extends Button{
         getCurrentLevel().resetInput();
         getCurrentLevel().resetFinalOutput();
         getCurrentLevel().resetConditions();
+        getCurrentLevel().resetFailConditions();
+        getCurrentLevel().resetStoredValue();
         getCurrentLevel().enableButtons();
         getCurrentLevel().loadLevel();
       }

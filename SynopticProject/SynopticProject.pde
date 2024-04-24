@@ -73,7 +73,14 @@ void loadLevels(){
       levelOutputList.append(levelOutput.getInt(j)); 
     }
     
-    int levelTimerLength = level.getInt("timerLength");
+    String levelLockedString = level.getString("levelLocked");
+    boolean levelLocked;
+    
+    if(levelLockedString.toLowerCase().equals("false")){
+      levelLocked = false;
+    } else{
+      levelLocked = true;
+    }
     
     JSONArray levelCodeBlocks = level.getJSONArray("availableCodeBlocks");
     StringList levelCodeBlocksList = new StringList();
@@ -86,7 +93,7 @@ void loadLevels(){
     int levelMinLoops = level.getInt("minimumLoopsUsed");
     
     
-    levels.add(new Level(levelInfo, i + 1,levelInputList, levelOutputList, levelTimerLength, levelCodeBlocksList, levelMinIfs, levelMinLoops));
+    levels.add(new Level(levelInfo, i + 1,levelInputList, levelOutputList, levelCodeBlocksList, levelMinIfs, levelMinLoops, levelLocked));
   }
 }
 
