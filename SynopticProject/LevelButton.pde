@@ -13,15 +13,17 @@ class LevelButton extends Button{
       getCurrentLevel().resetFinalOutput();
       getLS().display();
     } else if(this.getBText() == "Reset"){
-       getCurrentLevel().incrementAttemptCounter();
-       getCurrentLevel().clearCodeBlocks();
-       getCurrentLevel().resetInput();
-       getCurrentLevel().resetFinalOutput();
-       getCurrentLevel().resetConditions();
-       getCurrentLevel().enableButtons();
-       getCurrentLevel().loadLevel(); 
+      getCurrentLevel().incrementAttemptCounter();
+      getCurrentLevel().clearCodeBlocks();
+      getCurrentLevel().resetInput();
+      getCurrentLevel().resetFinalOutput();
+      getCurrentLevel().resetConditions();
+      getCurrentLevel().resetFailConditions();
+      getCurrentLevel().resetStoredValue();
+      getCurrentLevel().enableButtons();
+      getCurrentLevel().loadLevel(); 
     } else if(this.getBText() == "Run Function"){
-      getCurrentLevel().runFunction(getCurrentLevel().getLevelCBs()); 
+      getCurrentLevel().runFunction(getCurrentLevel().getLevelCBs(), true); 
     } else if(this.getBText() == "End current \nIf/Loop"){
       getCurrentLevel().closeCurrentConditional();
       getCurrentLevel().loadLevel();

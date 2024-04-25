@@ -9,6 +9,7 @@ abstract class Button{
   private String bText;
   private int bTextFS;
   private color bColour;
+  private color bFontColour;
   
   private boolean bActive;
   
@@ -20,6 +21,7 @@ abstract class Button{
      bText = text;
      bTextFS = fontSize;
      bColour = c;
+     bFontColour = color(255);
      bActive = active;
   }
   
@@ -28,7 +30,7 @@ abstract class Button{
     fill(bColour);
     rectMode(CENTER);
     rect(bX, bY, bWidth, bHeight);
-    fill(255);
+    fill(bFontColour);
     textSize(bTextFS);
     textAlign(CENTER, CENTER);
     text(bText, bX, bY);
@@ -54,5 +56,13 @@ abstract class Button{
   
   public void setBActive(boolean newValue){
     this.bActive = newValue;
+  }
+  
+  public void setColour(color newValue){
+    this.bColour = newValue; 
+  }
+  
+  public void setFontColour(color newValue){
+    this.bFontColour = newValue; 
   }
 }

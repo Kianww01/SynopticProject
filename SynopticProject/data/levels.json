@@ -8,7 +8,7 @@
       "levelExpectedOutput":[
         1
       ],
-      "timerLength": 60,
+      "levelLocked": "false",
       "availableCodeBlocks":[],
       "minimumIfsUsed": 0,
       "minimumLoopsUsed": 0
@@ -25,33 +25,31 @@
 		2,
 		3
       ],
-      "timerLength": 60,
+      "levelLocked": "true",
       "availableCodeBlocks":[],
       "minimumIfsUsed": 0,
       "minimumLoopsUsed": 0
     },
     {
-      "levelInfo": "Basic level 3",
+      "levelInfo": "If statements can be used to compare two values together \n Here you will select a number between 1-9 to compare to the stored value \n Make sure to close your if blocks using the button in the top right \n Give it a go!",
       "levelInput": [
         5,
         7,
-        3,
         5,
-        2
       ],
       "levelExpectedOutput":[
         5,
         5
       ],
-      "timerLength": 60,
+      "levelLocked": "true",
       "availableCodeBlocks":[
         "If"
       ],
-      "minimumIfsUsed": 1,
+      "minimumIfsUsed": 3,
       "minimumLoopsUsed": 0
     },
     {
-      "levelInfo": "Basic level 4",
+      "levelInfo": "Loops can be used to run a section of a function multiple times \n Here you will select a number betwen 1-9 to choose how many times the loop will run \n Make sure to close your loop blocks using the button in the top right\n Give it a go!",
       "levelInput": [
         2,
         2,
@@ -64,7 +62,7 @@
         2,
         2
       ],
-      "timerLength": 60,
+      "levelLocked": "true",
       "availableCodeBlocks": [
         "Loop"
       ],
@@ -72,7 +70,7 @@
       "minimumLoopsUsed": 1
     },
     {
-      "levelInfo": "Basic level 5",
+      "levelInfo": "Combine the use of loops and if statements to solve this problem!",
       "levelInput": [
         3,
         9,
@@ -87,7 +85,7 @@
         3,
         3
       ],
-      "timerLength": 60,
+      "levelLocked": "true",
       "availableCodeBlocks": [
         "If",
         "Loop"
