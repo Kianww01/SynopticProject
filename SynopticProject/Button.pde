@@ -9,10 +9,13 @@ abstract class Button{
   private String bText;
   private int bTextFS;
   private color bColour;
+  private color bFontColour;
+  
+  private PImage bImage;
   
   private boolean bActive;
   
-  Button(float x, float y, float w, float h, String text, int fontSize, color c, boolean active){
+  Button(float x, float y, float w, float h, String text, int fontSize, color c, boolean active, String img){
      bX = x;
      bY = y;
      bWidth = w;
@@ -20,15 +23,29 @@ abstract class Button{
      bText = text;
      bTextFS = fontSize;
      bColour = c;
+     bFontColour = color(255);
      bActive = active;
+     
+     if(img != ""){
+        bImage = loadImage(img);
+     }     
   }
   
   public void showButton(){
-    strokeWeight(1);
-    fill(bColour);
-    rectMode(CENTER);
-    rect(bX, bY, bWidth, bHeight);
-    fill(255);
+    if(bActive == false){
+      imageMode(CENTER);
+      image(loadImage("Assets/Buttons/Button16.png"),bX,bY,bWidth,bHeight);
+    }  else if(bImage != null){
+      imageMode(CENTER);
+      image(bImage,bX,bY,bWidth,bHeight);         
+    }  else{
+      strokeWeight(1);
+      fill(bColour);
+      rectMode(CENTER);
+      rect(bX, bY, bWidth, bHeight);  
+    }
+      
+    fill(bFontColour);
     textSize(bTextFS);
     textAlign(CENTER, CENTER);
     text(bText, bX, bY);
@@ -54,5 +71,13 @@ abstract class Button{
   
   public void setBActive(boolean newValue){
     this.bActive = newValue;
+  }
+  
+  public void setColour(color newValue){
+    this.bColour = newValue; 
+  }
+  
+  public void setFontColour(color newValue){
+    this.bFontColour = newValue; 
   }
 }

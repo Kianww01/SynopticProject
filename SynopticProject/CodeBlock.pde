@@ -14,8 +14,10 @@ class CodeBlock{
   
   private int ifCondition;
   private int loopLength;
+  
+  private PImage cbImage;
  
-  CodeBlock(float x, float y, float w, float h, String text, int fontSize, color c, int ifC, int lL){
+  CodeBlock(float x, float y, float w, float h, String text, int fontSize, color c, int ifC, int lL, String img){
      cbX = x;
      cbY = y;
      cbWidth = w;
@@ -28,13 +30,23 @@ class CodeBlock{
      loopLength = lL;
      
      codeBlocks = new ArrayList<CodeBlock>();
+     
+     if(img != ""){
+        cbImage = loadImage(img);
+     }  
   }
   
   void showCodeBlock(){
-    strokeWeight(1);
-    fill(cbColour);
-    rectMode(CENTER);
-    rect(cbX, cbY, cbWidth, cbHeight);
+    if(cbImage != null){
+      imageMode(CENTER);
+      image(cbImage,cbX,cbY,cbWidth,cbHeight);    
+    } else{
+      strokeWeight(1);
+      fill(cbColour);
+      rectMode(CENTER);
+      rect(cbX, cbY, cbWidth, cbHeight);
+    }
+    
     fill(255);
     textSize(cbTextFS);
     textAlign(CENTER, CENTER);

@@ -3,10 +3,10 @@ private StartMenu sm;
 private LevelSelect ls;
 private ArrayList<Level> levels;
 private Level currentLevel;
-private final char[] validInput = {'0','1','2','3','4','5','6','7','8','9'};
+private final char[] validInput = {'1','2','3','4','5','6','7','8','9'};
 
 void setup(){
-  size(1500, 800);
+  size(1500,1000);
     
   loadLevels();
     
@@ -73,7 +73,14 @@ void loadLevels(){
       levelOutputList.append(levelOutput.getInt(j)); 
     }
     
-    int levelTimerLength = level.getInt("timerLength");
+    String levelLockedString = level.getString("levelLocked");
+    boolean levelLocked;
+    
+    if(levelLockedString.toLowerCase().equals("false")){
+      levelLocked = false;
+    } else{
+      levelLocked = true;
+    }
     
     JSONArray levelCodeBlocks = level.getJSONArray("availableCodeBlocks");
     StringList levelCodeBlocksList = new StringList();
@@ -86,7 +93,7 @@ void loadLevels(){
     int levelMinLoops = level.getInt("minimumLoopsUsed");
     
     
-    levels.add(new Level(levelInfo, i + 1,levelInputList, levelOutputList, levelTimerLength, levelCodeBlocksList, levelMinIfs, levelMinLoops));
+    levels.add(new Level(levelInfo, i + 1,levelInputList, levelOutputList, levelCodeBlocksList, levelMinIfs, levelMinLoops, levelLocked));
   }
 }
 

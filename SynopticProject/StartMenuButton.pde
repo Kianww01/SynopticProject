@@ -1,7 +1,7 @@
 class StartMenuButton extends Button{
   
-  StartMenuButton(float x, float y, float w, float h, String text, int fontSize, color c, boolean active){
-    super(x, y, w, h, text, fontSize, c, active);
+  StartMenuButton(float x, float y, float w, float h, String text, int fontSize, color c, boolean active, String img){
+    super(x, y, w, h, text, fontSize, c, active, img);
   }
   
   @Override

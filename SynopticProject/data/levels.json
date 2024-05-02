@@ -1,20 +1,20 @@
 {
   "levels":[
     {
-	"levelInfo": "The Input block will take the next value in the input array and store it for use. \n The Output block will take the stored value and place it into the final output array. \n Use these blocks to solve the problem!",
+	"levelInfo": "Below there are two Arrays, an Array stores a set of data, in this case a set of numbers.\n\nThe Input block will remove the first value in the Array and store it in a Variable for later use.\n\nA Variable is used to store a value, in this case a number. (An Array is a special type of Variable)\n\nThe output block will take the value currently stored and add it to your final output Array\n\nTry using a combination of these blocks and then click 'Run Function' to try and solve this problem!",
       "levelInput": [
         1
       ],
       "levelExpectedOutput":[
         1
       ],
-      "timerLength": 60,
+      "levelLocked": "false",
       "availableCodeBlocks":[],
       "minimumIfsUsed": 0,
       "minimumLoopsUsed": 0
     },
     {
-      "levelInfo": "The Input and Output blocks can be used multiple times, try it now to solve the problem!",
+      "levelInfo": "In the last level you used the blocks to create a Function!\n\nA Function is a set of instructions used to perform a task.\n\nThe Input and Output blocks can be used multiple times, try it now to solve the problem!",
       "levelInput": [
 		1,
 		2,
@@ -25,33 +25,31 @@
 		2,
 		3
       ],
-      "timerLength": 60,
+      "levelLocked": "true",
       "availableCodeBlocks":[],
       "minimumIfsUsed": 0,
       "minimumLoopsUsed": 0
     },
     {
-      "levelInfo": "Basic level 3",
+      "levelInfo": "An If block is used to check whether something is true or false.\n\nHere you will select a number between 1-9 to compare to the stored value. Blocks placed after opening an If block will be nested inside of the If block.\n\nIf the number is the same as the stored value, the If block will return true and the blocks nested inside of the If block will run.\n\nIf the number is not the same as the stored value, the If block will return true and the blocks nested inside of the If block will not run.\n\nYou can close an If block by clicking the 'Close Current If/Loop' button that will appear once opened!",
       "levelInput": [
         5,
         7,
-        3,
         5,
-        2
       ],
       "levelExpectedOutput":[
         5,
         5
       ],
-      "timerLength": 60,
+      "levelLocked": "true",
       "availableCodeBlocks":[
         "If"
       ],
-      "minimumIfsUsed": 1,
+      "minimumIfsUsed": 3,
       "minimumLoopsUsed": 0
     },
     {
-      "levelInfo": "Basic level 4",
+      "levelInfo": "A loop block can be used to run a set of instructions multiple times without writing/placing each instruction more than once!\n\nHere you will select a number betwen 1-9 to choose how many times the loop will run\n\nBlocks placed after opening a Loop block will be nested inside of the Loop block. These blocks will run as many times as specified in the loop!\n\nYou can close an If block by clicking the 'Close Current If/Loop' button that will appear once opened!\n\nLevel Hint: You do not have to empty an array to complete a level!",
       "levelInput": [
         2,
         2,
@@ -64,7 +62,7 @@
         2,
         2
       ],
-      "timerLength": 60,
+      "levelLocked": "true",
       "availableCodeBlocks": [
         "Loop"
       ],
@@ -72,7 +70,7 @@
       "minimumLoopsUsed": 1
     },
     {
-      "levelInfo": "Basic level 5",
+      "levelInfo": "Use your new understanding of If blocks and Loop blocks to create a function to solve this problem!",
       "levelInput": [
         3,
         9,
@@ -87,7 +85,7 @@
         3,
         3
       ],
-      "timerLength": 60,
+      "levelLocked": "true",
       "availableCodeBlocks": [
         "If",
         "Loop"

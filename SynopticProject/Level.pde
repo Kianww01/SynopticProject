@@ -1,7 +1,7 @@
 class Level{
  
   final int maxConditionals = 8;
-  final int maxBlocks = 20;
+  final int maxBlocks = 24;
   
   private String levelInfo;
   private int levelNumber;
@@ -9,13 +9,15 @@ class Level{
   // Stores initial input used for resetting
   private IntList levelInitialInput;
   private IntList levelInput;
-  private IntList levelOutput;
+  private IntList levelOutput;  
   
-  private int levelTimerLength;
+  private boolean levelLocked;
   
   private StringList levelCodeBlockButtons;
   private int levelMinimumIfs;
+  private int ifsUsed;
   private int levelMinimumLoops;
+  private int loopsUsed;
   
   private ArrayList<LevelButton> levelGeneralButtons;
   private ArrayList<LevelButton> codeBlockButtons;
@@ -31,7 +33,12 @@ class Level{
   private boolean awaitingIfCondition;
   private boolean awaitingLoopLength;
   
-  Level(String lInfo, int lNum, IntList lInput, IntList lOutput, int lTimer, StringList lCodeBlocks, int lMinIfs, int lMinLoops){
+  // Used for function run function
+  private boolean hasFailed = false;
+  private boolean hasSucceeded = false;
+  private String failMessage = "You have failed!\n";
+  
+  Level(String lInfo, int lNum, IntList lInput, IntList lOutput, StringList lCodeBlocks, int lMinIfs, int lMinLoops, boolean lLocked){
     levelInfo = lInfo;
     levelNumber = lNum;
     levelInitialInput = new IntList();
@@ -39,8 +46,8 @@ class Level{
     for(int i = 0; i < levelInput.size(); i++){
       levelInitialInput.append(levelInput.get(i)); 
     }
+    levelLocked = lLocked;
     levelOutput = lOutput;
-    levelTimerLength = lTimer;
     levelCodeBlockButtons = lCodeBlocks;
     levelMinimumIfs = lMinIfs;
     levelMinimumLoops = lMinLoops;
@@ -48,19 +55,26 @@ class Level{
     storedValue = 404;
     
     levelGeneralButtons = new ArrayList<LevelButton>();
-    levelGeneralButtons.add(new LevelButton(100,750,150,50,"Back To Level Select",16,color(32,32,32), true));
-    levelGeneralButtons.add(new LevelButton(1100,750,150,50,"Run Function",16,color(32,32,32), true));
-    levelGeneralButtons.add(new LevelButton(925,750,150,50, "Reset",16,color(32,32,32),true));
+    levelGeneralButtons.add(new LevelButton(100,950,150,50,"Back To Level Select",16,color(32,32,32), true, "Assets/Buttons/Button05.png"));
+    levelGeneralButtons.add(new LevelButton(1100,950,150,50,"Run Function",16,color(32,32,32), true, "Assets/Buttons/Button05.png"));
+    levelGeneralButtons.add(new LevelButton(925,950,150,50, "Reset",16,color(32,32,32),true, "Assets/Buttons/Button05.png"));
     
     codeBlockButtons = new ArrayList<LevelButton>();
-    codeBlockButtons.add(new LevelButton(60,120,100,50,"Input",16,color(32,32,32),true));
-    codeBlockButtons.add(new LevelButton(180,120,100,50,"Output",16,color(32,32,32),true));
+    codeBlockButtons.add(new LevelButton(60,280,100,50,"Input",16,color(32,32,32),true, "Assets/Buttons/Button06.png"));
+    codeBlockButtons.add(new LevelButton(180,280,100,50,"Output",16,color(32,32,32),true, "Assets/Buttons/Button02.png"));
+    
+    String codeBlockColour = "";
     
     for(int i = 0; i < levelCodeBlockButtons.size(); i++){
-      codeBlockButtons.add(new LevelButton(180+((codeBlockButtons.size() - 1)*120),120,100,50,levelCodeBlockButtons.get(i),16,color(32,32,32),true));
+      if(levelCodeBlockButtons.get(i).equals("If")){
+        codeBlockColour = "Assets/Buttons/Button08.png";
+      } else if (levelCodeBlockButtons.get(i).equals("Loop")){
+        codeBlockColour = "Assets/Buttons/Button11.png";
+      }
+      codeBlockButtons.add(new LevelButton(180+((codeBlockButtons.size() - 1)*120),280,100,50,levelCodeBlockButtons.get(i),16,color(32,32,32),true, codeBlockColour));
     }
     
-    codeBlockButtons.add(new LevelButton(1140,220,100,50,"End current \nIf/Loop",16,color(32,32,32),false));
+    codeBlockButtons.add(new LevelButton(1140,400,100,50,"End current \nIf/Loop",16,color(32,32,32),false, "Assets/Buttons/Button05.png"));
     
     codeBlocks = new ArrayList<CodeBlock>();
     openConditionals = new ArrayList<CodeBlock>();
@@ -72,33 +86,31 @@ class Level{
   }
   
   private void loadLevel(){
-    background(134,197,218);
-    
+    background(#D4ECF2);
     strokeWeight(2);
     
     rectMode(CENTER);
-    fill(color(255,112,116));
-    rect(600,40,1200,80);
+    fill(color(#951818));
+    rect(600,120,1200,240);
     
-    fill(color(0,0,0));
+    fill(color(255));
     textSize(20);
+    textAlign(LEFT,TOP);
+    text(levelInfo,20,20);
+    
+    fill(color(#D4ECF2));
+    rect(600,280,1200,80);
+    
+    fill(color(#D4ECF2));
+    rect(1350,500,300,1000);
+
+    fill(color(#951818));
+    strokeWeight(3);
+    rect(600,440,800,80);
+    
     textAlign(CENTER,CENTER);
-    text(levelInfo,600,40);
-    
-    fill(color(134,197,218));
-    rect(600,120,1200,80);
-    // Draw Code Blocks
-    generateCodeBlockButtons();
-    
-    fill(color(134,197,218));
-    rect(1350,400,300,800);
-    // Code Block Area
-    
-    fill(color(134,197,218));
-    rect(600,240,800,80);
-    
     // Loops input array and turns it into a string
-    fill(color(0,0,0));
+    fill(color(255));
     String inputArrayStr = "Problem Input: ";
     for(int i = 0; i < levelInitialInput.size(); i++){
       inputArrayStr += levelInitialInput.get(i);
@@ -107,13 +119,14 @@ class Level{
         inputArrayStr += ", "; 
       }
     }    
-    text(inputArrayStr,600,240);
+    text(inputArrayStr,600,440);
     
-    fill(color(134,197,218));
-    rect(600,340,800,80);
+    fill(color(#951818));
+    rect(600,540,800,80);
     
     // Loops output array and turns it into a string
-    fill(color(0,0,0));
+    fill(color(255));
+    strokeWeight(3);
     String outputArrayStr = "Expected Output: ";
     for(int i = 0; i < levelOutput.size(); i++){
       outputArrayStr += levelOutput.get(i);
@@ -122,34 +135,58 @@ class Level{
         outputArrayStr += ", ";
       }
     }
-    text(outputArrayStr,600,340);
+    text(outputArrayStr,600,540);
     
-    fill(color(134,197,218));
-    rect(600,540,800,80);
+    //fill(color(134,197,218));
+    //rect(600,540,800,80);
     
-    String finalOutputArrayStr = "Final Output: ";
-    for(int i = 0; i < finalLevelOutput.size(); i++){
-      finalOutputArrayStr += finalLevelOutput.get(i);
+    //String finalOutputArrayStr = "Final Output: ";
+    //for(int i = 0; i < finalLevelOutput.size(); i++){
+    //  finalOutputArrayStr += finalLevelOutput.get(i);
       
-      if(i + 1 != finalLevelOutput.size()){
-        finalOutputArrayStr += ", "; 
-      }
+    //  if(i + 1 != finalLevelOutput.size()){
+    //    finalOutputArrayStr += ", "; 
+    //  }
+    //}
+    
+    //fill(color(0,0,0));
+    //text(finalOutputArrayStr,600,540);
+      
+    fill(color(0));
+    textSize(24);
+    text("Attempts: " + levelAttemptCounter,1130,340);
+    
+    if(levelMinimumIfs > 0 || levelMinimumLoops > 0){
+      fill(color(#951818));
+      strokeWeight(3);
+      rect(600,740,800,80);
+    }
+     
+    fill(color(255));
+    if(levelMinimumIfs > 0){
+      text("Minimum If Blocks Required: " + levelMinimumIfs,600,720); 
     }
     
-    fill(color(0,0,0));
-    text(finalOutputArrayStr,600,540);
-      
-    fill(color(0,0,0));
-    textSize(16);
-    text("Attempts: " + levelAttemptCounter,1140,175);
+    if(levelMinimumLoops > 0){
+      text("Minimum Loop Blocks Required: " + levelMinimumLoops,600,760); 
+    }
+       
+    if(blocksAdded >= maxBlocks){
+      disableCodeBlockButtons();
+    } else if(openConditionals.size() >= maxConditionals){
+      disableConditionalCodeBlockButtons();
+    } else if (hasSucceeded == false && hasFailed == false){
+      enableButtons();
+    }
     
     generateLevelButtons();
+    generateCodeBlockButtons();
     generateCodeBlocks(codeBlocks); 
   }
   
   private void buttonClicked(){
     for(int i = 0; i < levelGeneralButtons.size(); i++){
-      if(levelGeneralButtons.get(i).isClicked()){
+      if(levelGeneralButtons.get(i).isClicked() && levelGeneralButtons.get(i).getBActive() == true){
         levelGeneralButtons.get(i).onClick();  
       }
     }
@@ -194,6 +231,21 @@ class Level{
     this.levelAttemptCounter = 0; 
   }
   
+  public void resetStoredValue(){
+    this.storedValue = 404; 
+  }
+  
+  public void resetFailConditions(){
+    this.hasFailed = false;
+    this.failMessage = "You have failed!\n";
+    this.loopsUsed = 0;
+    this.ifsUsed = 0;
+  }
+  
+  public void resetSuccessConditions(){
+    this.hasSucceeded = false; 
+  }
+  
   public void clearCodeBlocks(){
     this.codeBlocks.clear();
     this.blocksAdded = 0;
@@ -229,8 +281,105 @@ class Level{
     return this.levelInput;  
   }
   
-  private void fail(String txt){
-    println(txt);
+  private void fail(){
+     disableButtons();
+    
+    for(int i = 0; i < levelGeneralButtons.size(); i++){
+      if(levelGeneralButtons.get(i).getBText() == "Reset" || levelGeneralButtons.get(i).getBText() == "Back To Level Select"){
+         levelGeneralButtons.get(i).setBActive(true);
+      }
+    }
+    
+    loadLevel();
+    
+    fill(color(#951818));
+    rect(600,600,800,500);
+    
+    fill(color(#951818));
+    rect(600,420,600,70);
+    rect(600,500,600,70);
+    
+    fill(color(255));
+    textSize(24);
+    String outputArrayStr = "Expected Output: ";
+    for(int i = 0; i < levelOutput.size(); i++){
+      outputArrayStr += levelOutput.get(i);
+      
+      if(i + 1 != levelOutput.size()){
+        outputArrayStr += ", ";
+      }
+    }
+    text(outputArrayStr,600,420);
+    
+    String finalOutputArrayStr = "Your Output: ";
+    for(int i = 0; i < finalLevelOutput.size(); i++){
+       finalOutputArrayStr += finalLevelOutput.get(i);
+       
+       if(i + 1 != finalLevelOutput.size()){
+         finalOutputArrayStr += ", "; 
+       }
+    }
+    text(finalOutputArrayStr,600,500);
+    
+    textSize(24);
+    textAlign(CENTER,TOP);
+    text(failMessage,600,570);
+  }
+  
+  private void success(){
+    hasSucceeded = true;
+    
+    disableButtons();
+                 
+    for(int i = 0; i < levelGeneralButtons.size(); i++){
+      if(levelGeneralButtons.get(i).getBText() == "Back To Level Select"){
+         levelGeneralButtons.get(i).setBActive(true);
+      }
+    }
+    
+    loadLevel();
+    
+    fill(color(#951818));
+    rectMode(CENTER);
+    strokeWeight(3);
+    rect(600,600,800,500);
+    
+    fill(color(255));
+    textAlign(CENTER,CENTER);
+    textSize(32);
+    text("Level Complete!",600,420);
+    
+    fill(color(#951818));
+    rect(600,510,600,70);
+    rect(600,590,600,70);
+    
+    fill(color(255));
+    textSize(24);
+    String outputArrayStr = "Expected Output: ";
+    for(int i = 0; i < levelOutput.size(); i++){
+      outputArrayStr += levelOutput.get(i);
+      
+      if(i + 1 != levelOutput.size()){
+        outputArrayStr += ", ";
+      }
+    }
+    text(outputArrayStr,600,510);
+    
+    String finalOutputArrayStr = "Your Output: ";
+    for(int i = 0; i < finalLevelOutput.size(); i++){
+       finalOutputArrayStr += finalLevelOutput.get(i);
+       
+       if(i + 1 != finalLevelOutput.size()){
+         finalOutputArrayStr += ", "; 
+       }
+    }
+    text(finalOutputArrayStr,600,590);
+    
+    textSize(24);
+    text("Attempts Taken: " + (int(levelAttemptCounter) + 1),600,670);
+    text("Return to Level Select to try other levels or to try this level again!",600,700);
+    
+    ls.unlockNextLevel();
   }
   
   private ArrayList<CodeBlock> getLevelCBs(){
@@ -243,22 +392,51 @@ class Level{
   
   public void addCodeBlock(String blockType){
     if(blockType.toLowerCase().equals("input") || blockType.toLowerCase().equals("output")){
-      CodeBlock cb = new CodeBlock(1280 + (openConditionals.size() * 15),20+(blocksAdded*40),150,35,blockType,16,color(32,32,32),0,0);
+      String cbImage = "";
+      if(blockType.toLowerCase().equals("input")){
+        cbImage = "Assets/Buttons/Button06.png";
+      } else if (blockType.toLowerCase().equals("output")){
+        cbImage = "Assets/Buttons/Button02.png";
+      }
+      CodeBlock cb = new CodeBlock(1280 + (openConditionals.size() * 15),30+(blocksAdded*40),150,35,blockType,16,color(32,32,32),0,0, cbImage);
       if(openConditionals.size() > 0){
         openConditionals.get(openConditionals.size() - 1).addToCodeBlocks(cb);
       } else{
         codeBlocks.add(cb);     
       }    
-      blocksAdded++;
+      blocksAdded++;      
+      loadLevel();
     } else if(blockType.toLowerCase().equals("if")){
-      disableButtons(); 
       awaitingIfCondition = true;
+      drawAwaitingInput("if");
     } else if(blockType.toLowerCase().equals("loop")){
-      disableButtons();
       awaitingLoopLength = true;
+      drawAwaitingInput("loop");
+    }
+  }
+  
+  private void drawAwaitingInput(String condition){
+    disableButtons();
+    
+    for(int i = 0; i < levelGeneralButtons.size(); i++){
+      if(levelGeneralButtons.get(i).getBText() == "Reset" || levelGeneralButtons.get(i).getBText() == "Back To Level Select"){
+         levelGeneralButtons.get(i).setBActive(true);
+      }
     }
     
-    loadLevel();
+    fill(color(#1D5F33));
+    strokeWeight(3);
+    rect(600,500,600,100);
+    
+    textAlign(CENTER, CENTER);
+    textSize(22);
+    fill(255);
+    
+    if(condition == "if"){
+      text("Press a number key (1-9) to set the condition for your If block",600,500);
+    } else if(condition == "loop"){
+      text("Press a number key (1-9) to select the amount of times you would like to Loop",600,500);
+    }
   }
   
   public boolean getAwaitingIfCondition(){
@@ -269,8 +447,16 @@ class Level{
     return this.awaitingLoopLength; 
   }
   
+  public boolean getLevelLocked(){
+    return this.levelLocked; 
+  }
+  
+  public void setLevelLocked(boolean nV){
+    this.levelLocked = nV; 
+  }
+  
   public void generateIfBlock(int ifC){
-    CodeBlock cb = new CodeBlock(1280 + (openConditionals.size() * 15), 20+(blocksAdded*40),150,35,"If Stored Value = " + ifC,16,color(32,32,32),ifC,0);
+    CodeBlock cb = new CodeBlock(1280 + (openConditionals.size() * 15), 30+(blocksAdded*40),150,35,"If Stored Value = " + ifC,16,color(32,32,32),ifC,0, "Assets/Buttons/Button08.png");
     if(openConditionals.size() > 0){
       openConditionals.get(openConditionals.size() - 1).addToCodeBlocks(cb);
       openConditionals.add(cb);
@@ -280,13 +466,14 @@ class Level{
     }
     
     this.awaitingIfCondition = false;
+    ifsUsed++;
     enableButtons();
     blocksAdded++;
     loadLevel();
   }
   
   public void generateLoopBlock(int lL){
-    CodeBlock cb = new CodeBlock(1280 + (openConditionals.size() * 15), 20+(blocksAdded*40),150,35,"Loop " + lL + " Times",16,color(32,32,32),0,lL);
+    CodeBlock cb = new CodeBlock(1280 + (openConditionals.size() * 15), 30+(blocksAdded*40),150,35,"Loop " + lL + " Times",16,color(32,32,32),0,lL, "Assets/Buttons/Button11.png");
     if(openConditionals.size() > 0){
       openConditionals.get(openConditionals.size() - 1).addToCodeBlocks(cb);
       openConditionals.add(cb);
@@ -296,6 +483,7 @@ class Level{
     }
     
     this.awaitingLoopLength = false;
+    loopsUsed++;
     enableButtons();
     blocksAdded++;
     loadLevel();
@@ -306,18 +494,32 @@ class Level{
       levelGeneralButtons.get(i).setBActive(false);
     }
     
-    for(int i = 0; i < codeBlockButtons.size(); i++){
-      codeBlockButtons.get(i).setBActive(false);
-    }
+    disableCodeBlockButtons();
   }
   
   public void enableButtons(){
     for(int i = 0; i < levelGeneralButtons.size(); i++){
-      codeBlockButtons.get(i).setBActive(true);
+      levelGeneralButtons.get(i).setBActive(true);
     }
     
     for(int i = 0; i < codeBlockButtons.size(); i++){
       codeBlockButtons.get(i).setBActive(true);
+    }
+  }
+  
+  public void disableCodeBlockButtons(){
+    // Used for handling block limits
+    for(int i = 0; i < codeBlockButtons.size(); i++){
+      codeBlockButtons.get(i).setBActive(false); 
+    }
+  }
+  
+  public void disableConditionalCodeBlockButtons(){
+    // Used for handling nested block limits
+    for(int i = 0; i < codeBlockButtons.size(); i++){
+      if(codeBlockButtons.get(i).getBText().toLowerCase().equals("if") || codeBlockButtons.get(i).getBText().toLowerCase().equals("loop")){
+        codeBlockButtons.get(i).setBActive(false);
+      }
     }
   }
   
@@ -332,33 +534,89 @@ class Level{
     }
   }
     
-  public void runFunction(ArrayList<CodeBlock> cbArray){
+  public void runFunction(ArrayList<CodeBlock> cbArray, Boolean initialArray){
+    
     for(int i = 0; i < cbArray.size(); i++){
       if(cbArray.get(i).getCBText().toLowerCase().equals("input")){
         if(levelInput.size() == 0){
-          fail("You have failed! You can not input from an empty array! \n Please reset the level to try again!");
+          if(!failMessage.contains("You can not input from an empty array")){
+            failMessage += "You can not input from an empty array!\n";
+          }
+          hasFailed = true;
         } else{
            storedValue = levelInput.get(0);
            levelInput.remove(0);
         }
       } else if (cbArray.get(i).getCBText().toLowerCase().equals("output")){
         if(storedValue == 404){
-          fail("You have failed! You do not have a value stored! \n Please reset the level to try again!"); 
+          if(!failMessage.contains("You do not have a value stored to output")){
+            failMessage += "You do not have a value stored to output!\n";
+          }        
+          hasFailed = true;
         } else {
           finalLevelOutput.append(storedValue);
           storedValue = 404;
         }
       } else if (cbArray.get(i).getCBText().toLowerCase().contains("if")){
-        if(storedValue == cbArray.get(i).getIfCondition()){
-          runFunction(cbArray.get(i).getCodeBlocks());
+        if(storedValue == 404){
+          if(!failMessage.contains("You do not have a stored value to compare to"));{
+            failMessage += "You do not have a stored value to compare to for your if block!\n";
+          }
+          hasFailed = true;
+        } else if(storedValue == cbArray.get(i).getIfCondition()){
+          runFunction(cbArray.get(i).getCodeBlocks(), false);
         }
       } else if (cbArray.get(i).getCBText().toLowerCase().contains("loop")){
         for(int loopL = 0; loopL < cbArray.get(i).getLoopLength(); loopL++){
-          runFunction(cbArray.get(i).getCodeBlocks());
+          runFunction(cbArray.get(i).getCodeBlocks(), false);
         }
       }
     }
     
-    loadLevel();
+    
+    
+    if(initialArray == true){
+      if(levelOutput.size() == finalLevelOutput.size()){
+        boolean arraysEqual = true;
+        for(int i = 0; i < levelOutput.size(); i++){
+          if(levelOutput.get(i) != finalLevelOutput.get(i)){
+            arraysEqual = false; 
+          }
+        }
+        
+        if(arraysEqual == false){
+          if(!failMessage.contains("Your output does not match the expected output"));{
+            failMessage += "Your output does not match the expected output!\n"; 
+          }
+          hasFailed = true;
+        } 
+      } else{
+        if(!failMessage.contains("Your output does not match the expected output"));{
+            failMessage += "Your output does not match the expected output!\n";
+          } 
+        hasFailed = true;
+      }
+      
+       if(ifsUsed < levelMinimumIfs){
+         if(!failMessage.contains("You have used less If blocks than required"));{
+            failMessage += "You have used less If blocks than required!\n";
+          }
+       hasFailed = true;
+      }
+    
+      if (loopsUsed < levelMinimumLoops){
+        if(!failMessage.contains("You have used less Loop blocks than required"));{
+            failMessage += "You have used less Loop blocks than required!\n";
+          }
+        hasFailed = true;
+      }
+      
+      if(hasFailed){
+        failMessage += "\nPlease reset the level to try again!";
+        fail(); 
+      } else{
+        success();
+      }
+    }    
   }
 }
